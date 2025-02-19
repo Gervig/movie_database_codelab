@@ -1,5 +1,7 @@
 package app;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -7,6 +9,9 @@ import java.net.http.HttpResponse;
 
 public class ApiReader
 {
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+
     public String getDataFromClientWithID(String url, String id)
     {
         String movieURL = url.replace("%%", id);

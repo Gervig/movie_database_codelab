@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class ApiReader
@@ -119,6 +120,7 @@ public class ApiReader
     {
         String lowRating = String.valueOf(lowerRating);
         String upRating = String.valueOf(upperRating);
+
         String movieURL = url.replace("%%", lowRating);
         movieURL = movieURL.replace("##", upRating);
 
@@ -149,8 +151,41 @@ public class ApiReader
         return null;
     }
 
+    public String getDataFromClientSortByYears(String url)
+    {
+        try
+        {
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .uri(new URI(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200)
+            {
+                String body = response.body();
+                return body;
+            } else
+            {
+                System.out.println("GET request failed. Status code: " + response.statusCode());
+            }
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
+
+
+
+
+    //MovieDTO these perhaps belongs in MovieService
 
     public List<MovieDTO> getMovieDataBySearch(String json)
     {

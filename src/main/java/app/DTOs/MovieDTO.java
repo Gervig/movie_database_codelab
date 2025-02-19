@@ -12,6 +12,7 @@ public class MovieDTO
     @JsonProperty("original_title")
     private String title;
 
+    private int id;
 
     @JsonProperty("release_date")
     private LocalDate releaseDate;

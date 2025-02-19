@@ -8,14 +8,15 @@ public class Main
 {
     public static void main(String[] args)
     {
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-        EntityManager em = emf.createEntityManager();
+        ApiReader apiReader = new ApiReader();
 
+        String api_key = System.getenv("api_key");
 
+        String movie = "Lord of the rings";
+        String response = apiReader.getDataFromClientWithTitle("https://api.themoviedb.org/3/search/movie?query=%%&api_key=" + api_key, movie);
 
-        // Close the database connection:
-        em.close();
-        emf.close();
+        System.out.println(response);
+
     }
 
 }

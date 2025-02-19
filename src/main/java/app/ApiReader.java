@@ -115,6 +115,42 @@ public class ApiReader
         return null;
     }
 
+    public String getDataFromClientWithRating(String url, Float lowerRating, Float upperRating)
+    {
+        String lowRating = String.valueOf(lowerRating);
+        String upRating = String.valueOf(upperRating);
+        String movieURL = url.replace("%%", lowRating);
+        movieURL = movieURL.replace("##", upRating);
+
+        try
+        {
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .uri(new URI(movieURL))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200)
+            {
+                String body = response.body();
+                return body;
+            } else
+            {
+                System.out.println("GET request failed. Status code: " + response.statusCode());
+            }
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
 
     public List<MovieDTO> getMovieDataBySearch(String json)
     {
@@ -153,6 +189,7 @@ public class ApiReader
         }
         return null;
     }
+
 
 
 }

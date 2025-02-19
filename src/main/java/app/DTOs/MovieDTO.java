@@ -12,8 +12,6 @@ public class MovieDTO
     @JsonProperty("original_title")
     private String title;
 
-    @JsonProperty("overview")
-    private String description;
 
     @JsonProperty("release_date")
     private LocalDate releaseDate;
@@ -26,6 +24,9 @@ public class MovieDTO
 
     @JsonProperty("adult")
     private Boolean pg13;
+
+    @JsonProperty("overview")
+    private String description;
 
     public String getReleaseYear(LocalDate releaseDate)
     {

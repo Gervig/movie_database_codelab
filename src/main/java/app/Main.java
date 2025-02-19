@@ -1,5 +1,6 @@
 package app;
 
+import app.DTOs.MovieDTO;
 import app.config.HibernateConfig;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -16,6 +17,11 @@ public class Main
         String response = apiReader.getDataFromClientWithTitle("https://api.themoviedb.org/3/search/movie?query=%%&api_key=" + api_key, movie);
 
         System.out.println(response);
+
+        MovieDTO movieDTO = apiReader.getMovieData(response);
+
+        System.out.println(movieDTO);
+
 
     }
 

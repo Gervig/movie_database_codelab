@@ -81,14 +81,14 @@ public class ApiReader
         return null;
     }
 
-    public List<MovieDTO> getMovieData(String json)
+    public MovieDTO getMovieData(String json)
     {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JavaTimeModule());
 
         try
         {
-            List<MovieDTO> movieDTO = Arrays.stream(objectMapper.readValue(json, MovieDTO[].class)).toList();
+            MovieDTO movieDTO = objectMapper.readValue(json, MovieDTO[].class)[0];
             return movieDTO;
 
         } catch (JsonProcessingException jPE)

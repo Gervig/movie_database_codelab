@@ -26,4 +26,5 @@ public class MovieDTO
 
     @JsonProperty("adult")
     private Boolean pg13;
+
 }

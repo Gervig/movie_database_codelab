@@ -1,11 +1,17 @@
 package app;
 
+import app.DTOs.MovieDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
+import java.util.List;
 
 public class ApiReader
 {
@@ -31,7 +37,8 @@ public class ApiReader
             {
                 String body = response.body();
                 return body;
-            } else {
+            } else
+            {
                 System.out.println("GET request failed. Status code: " + response.statusCode());
             }
 
@@ -42,9 +49,10 @@ public class ApiReader
         return null;
     }
 
-    public String getDataFromClientWithTitle(String url, String title){
+    public String getDataFromClientWithTitle(String url, String title)
+    {
         String movieURL = url.replace("%%", title);
-        movieURL = url.replace(" ","%20");
+        movieURL = movieURL.replace(" ", "%20");
 
         try
         {
@@ -61,13 +69,31 @@ public class ApiReader
             {
                 String body = response.body();
                 return body;
-            } else {
+            } else
+            {
                 System.out.println("GET request failed. Status code: " + response.statusCode());
             }
 
         } catch (Exception e)
         {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<MovieDTO> getMovieData(String json)
+    {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.registerModule(new JavaTimeModule());
+
+        try
+        {
+            List<MovieDTO> movieDTO = Arrays.stream(objectMapper.readValue(json, MovieDTO[].class)).toList();
+            return movieDTO;
+
+        } catch (JsonProcessingException jPE)
+        {
+            jPE.printStackTrace();
         }
         return null;
     }

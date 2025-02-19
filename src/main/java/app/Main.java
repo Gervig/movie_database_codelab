@@ -21,9 +21,7 @@ public class Main
         System.out.println(response);
 
         List<MovieDTO> movieDTO = apiReader.getMovieData(response);
-
-//        System.out.println(movieDTO);
-
+        
         movieDTO.stream().forEach(System.out::println);
 
     }

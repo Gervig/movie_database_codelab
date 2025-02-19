@@ -3,9 +3,11 @@ package app;
 import app.DTOs.MovieDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -81,21 +83,22 @@ public class ApiReader
         return null;
     }
 
-    public MovieDTO getMovieData(String json)
-    {
+    public List<MovieDTO> getMovieData(String json) {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JavaTimeModule());
 
-        try
-        {
-            MovieDTO movieDTO = objectMapper.readValue(json, MovieDTO[].class)[0];
-            return movieDTO;
+        try {
+            // Map the 'results' array from the JSON response to a List of MovieDTOs
+            return Arrays.asList(objectMapper.readValue(
+                    objectMapper.readTree(json).get("results").toString(), MovieDTO[].class
+            ));
 
-        } catch (JsonProcessingException jPE)
-        {
+        } catch (JsonProcessingException jPE) {
             jPE.printStackTrace();
         }
         return null;
     }
+
+
 
 }

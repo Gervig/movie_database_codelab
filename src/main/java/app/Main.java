@@ -5,6 +5,8 @@ import app.config.HibernateConfig;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.List;
+
 public class Main
 {
     public static void main(String[] args)
@@ -18,10 +20,11 @@ public class Main
 
         System.out.println(response);
 
-        MovieDTO movieDTO = apiReader.getMovieData(response);
+        List<MovieDTO> movieDTO = apiReader.getMovieData(response);
 
-        System.out.println(movieDTO);
+//        System.out.println(movieDTO);
 
+        movieDTO.stream().forEach(System.out::println);
 
     }
 

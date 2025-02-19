@@ -27,4 +27,10 @@ public class MovieDTO
     @JsonProperty("adult")
     private Boolean pg13;
 
+    public String getReleaseYear(LocalDate releaseDate)
+    {
+        String releaseYear = String.valueOf(this.releaseDate.getYear());
+        return releaseYear;
+    }
+
 }

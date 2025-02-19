@@ -32,6 +32,8 @@ public class Main
         MovieDTO movieDTO3 = apiReader.getMovieDataFindByID(response3);
         System.out.println(movieDTO3);
 
+        System.out.println(movieDTO3.getReleaseYear(movieDTO3.getReleaseDate()));
+
 
 
 

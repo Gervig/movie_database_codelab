@@ -1,12 +1,25 @@
 package app;
 
+import app.DTOs.MovieDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Arrays;
+import java.util.List;
 
 public class ApiReader
 {
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+
     public String getDataFromClientWithID(String url, String id)
     {
         String movieURL = url.replace("%%", id);
@@ -26,7 +39,8 @@ public class ApiReader
             {
                 String body = response.body();
                 return body;
-            } else {
+            } else
+            {
                 System.out.println("GET request failed. Status code: " + response.statusCode());
             }
 
@@ -37,9 +51,10 @@ public class ApiReader
         return null;
     }
 
-    public String getDataFromClientWithTitle(String url, String title){
+    public String getDataFromClientWithTitle(String url, String title)
+    {
         String movieURL = url.replace("%%", title);
-        movieURL = url.replace(" ","%20");
+        movieURL = movieURL.replace(" ", "%20");
 
         try
         {
@@ -56,7 +71,8 @@ public class ApiReader
             {
                 String body = response.body();
                 return body;
-            } else {
+            } else
+            {
                 System.out.println("GET request failed. Status code: " + response.statusCode());
             }
 
@@ -66,5 +82,23 @@ public class ApiReader
         }
         return null;
     }
+
+    public List<MovieDTO> getMovieData(String json) {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.registerModule(new JavaTimeModule());
+
+        try {
+            // Map the 'results' array from the JSON response to a List of MovieDTOs
+            return Arrays.asList(objectMapper.readValue(
+                    objectMapper.readTree(json).get("results").toString(), MovieDTO[].class
+            ));
+
+        } catch (JsonProcessingException jPE) {
+            jPE.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 }

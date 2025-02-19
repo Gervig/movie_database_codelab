@@ -3,16 +3,13 @@ package app;
 import app.DTOs.MovieDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -119,7 +116,7 @@ public class ApiReader
     }
 
 
-    public List<MovieDTO> getMovieData(String json)
+    public List<MovieDTO> getMovieDataBySearch(String json)
     {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JavaTimeModule());
@@ -131,6 +128,25 @@ public class ApiReader
                     objectMapper.readTree(json).get("results").toString(), MovieDTO[].class
             ));
 
+        } catch (JsonProcessingException jPE)
+        {
+            jPE.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public MovieDTO getMovieDataFindByID(String json)
+    {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.registerModule(new JavaTimeModule());
+
+        try
+        {
+            MovieDTO movieDTO = objectMapper.readValue(
+                    objectMapper.readTree(json).get("movie_results").toString(),MovieDTO[].class)[0];
+
+            return movieDTO;
         } catch (JsonProcessingException jPE)
         {
             jPE.printStackTrace();
